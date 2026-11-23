@@ -1,0 +1,48 @@
+{
+  "name": "waflow",
+  "type": "module",
+  "private": true,
+  "packageManager": "bun@1.4.2",
+  "scripts": {
+    "dev": "bun run build && bun scripts/dev.ts",
+    "preview": "bun scripts/dev.ts --port 4173",
+    "prepare": "svelte-kit sync",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "build": "vite build && bun scripts/worker-build.ts && wrangler deploy --dry-run --outdir dist",
+    "deploy": "bun scripts/deploy.ts",
+    "db:local:setup": "wrangler d1 migrations apply DB --local",
+    "check:deploy": "bun scripts/deploy-check.ts && bun scripts/deploy-script-check.ts",
+    "test": "bun tests/request-example-check.ts && bun tests/messaging-check.ts && bun tests/webhooks-check.ts && bun tests/gateway-worker-smoke.ts && bun tests/webhooks-worker-smoke.ts && bun tests/app-worker-smoke.ts",
+    "gen": "wrangler types"
+  },
+  "patchedDependencies": {
+    "libsignal@6.0.0": "patches/libsignal@6.0.0.patch",
+    "protobufjs@7.6.6": "patches/protobufjs@7.6.6.patch"
+  },
+  "dependencies": {
+    "@lucide/svelte": "^1.49.0",
+    "@nqmcreative/ui": "^0.5.1",
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "hono": "^4.13.12",
+    "pino": "^10.3.1",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261002.1",
+    "@sveltejs/adapter-cloudflare": "^8.0.0",
+    "@sveltejs/kit": "^3.0.0",
+    "@sveltejs/vite-plugin-svelte": "^7.2.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "@types/node": "26.6.4",
+    "@types/qrcode": "^1.5.6",
+    "svelte": "^5.56.7",
+    "svelte-check": "^4.6.0",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.0",
+    "wrangler": "^4.146.0"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  }
+}
